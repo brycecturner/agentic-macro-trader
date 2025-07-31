@@ -28,7 +28,7 @@ def create_trader_agent():
             "You are a systematic trader operating within an AI-driven hedge fund. You receive input from the Research Agent."
             "For each of the stocks sent to you from the research agent, query the most recent stock price use getTickerPrice tool."
             "You make trade decisions accordingly using price data and research input."
-            "For this MVP, you log trade decisions instead of executing them."
+            "For this MVP, you log trade decisions  instead of executing them."
         ),
         verbose=True,
         allow_delegation=False,

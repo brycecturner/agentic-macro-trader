@@ -77,7 +77,7 @@ The purpose of this project is to build an automated, **agent-based portfolio ma
 
 agentic-portfolio/
 ├── agents/
-│ ├── research_agent.py # TechPod Research Agent (MVP)
+│ ├── research_agent.py #   TechPod Research Agent (MVP)
 │ ├── risk_agent.py # Risk evaluation agent (planned)
 │ └── trader_agent.py # Trader agent for order execution (planned)
 ├── tasks/
