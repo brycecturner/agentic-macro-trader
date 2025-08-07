@@ -2,54 +2,38 @@ import logging
 from crewai import Crew
 import asyncio
 
-from tasks.research_tasks import (
-    create_research_fed_policy_task,
-    create_research_banking_risk_task
-)
-from agents.research_agents import (
-    create_fed_policy_research_agent,
-    create_banking_risk_research_agent
-)
 
 logger = logging.getLogger(__name__)
 
-def create_parallel_crews():
-    logger.info("Initializing creation of parallel research crews...")
+async def run_parallel_crews(task_agent_pairs: list[tuple]) -> list[str]:
+    """
+    Runs multiple (agent, task) pairs in parallel and returns their outputs.
 
-    # Create tasks
-    logger.info("Creating Fed policy research task and agent.")
-    fed_task = create_research_banking_risk_task()
+    Args:
+        task_agent_pairs (list of tuples): Each tuple should contain a Task and its corresponding Agent.
 
-    logger.info("Creating banking system risk research task and agent.")
-    bank_task = create_research_banking_risk_task()
+    Returns:
+        List of task outputs (strings).
+    """
+    logger.info("Starting parallel execution of research crews...")
 
-    # Assemble crews
-    fed_crew = Crew(
-        agents=[fed_task.agent],
-        tasks=[fed_task],
-        verbose=True
-    )
-    logger.info("Fed policy research crew assembled.")
+    async def run_single_crew(task, agent):
+        logger.info(f"Launching crew for agent: {agent.role}")
 
-    bank_crew = Crew(
-        agents=[bank_task.agent],
-        tasks=[bank_task],
-        verbose=True
-    )
-    logger.info("Banking risk research crew assembled.")
+        crew = Crew(
+            agents=[agent],
+            tasks=[task],
+            verbose=True
+        )
+        output = crew.kickoff()
+        logger.info(f"Completed crew for agent: {agent.role}")
+        return (task.description, agent.role, output)
 
-    logger.info("Both research crews created successfully.")
-    return fed_crew, bank_crew
+    # Create coroutine tasks
+    coroutines = [run_single_crew(task, agent) for task, agent in task_agent_pairs]
 
+    # Gather all results
+    results = await asyncio.gather(*coroutines)
 
-async def run_parallel_crews():
-    fed_crew, bank_crew = create_parallel_crews()
-
-    # Run both crews concurrently
-    results = await asyncio.gather(
-        asyncio.to_thread(fed_crew.kickoff),
-        asyncio.to_thread(bank_crew.kickoff)
-    )
-
-    fed_output, bank_output = results
-    return fed_output, bank_output
+    logger.info("All research crews completed.")
+    return results
