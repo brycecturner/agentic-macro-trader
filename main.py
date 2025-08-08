@@ -4,7 +4,7 @@ import asyncio
 from crew.run_parallel_crews import run_parallel_crews
 from utils.utils import join_outputs_as_json
 
-from crewai_tools import SerperDevTool
+# from crewai_tools import SerperDevTool
 
 
 from tasks.research_tasks import (
@@ -13,8 +13,7 @@ from tasks.research_tasks import (
     create_research_global_capital_flows_task,
     create_research_fiscal_policy_task,
     create_research_macro_growth_task,
-    create_research_macro_inflation_task
-
+    create_research_macro_inflation_task,
 )
 from agents.research_agents import (
     create_fed_policy_research_agent,
@@ -22,13 +21,13 @@ from agents.research_agents import (
     create_global_capital_flows_research_agent,
     create_fiscal_policy_research_agent,
     create_macro_growth_research_agent,
-    create_macro_inflation_research_agent
+    create_macro_inflation_research_agent,
 )
 
 # Load environment variables
 load_dotenv()
-# os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
-# os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY")
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY")
 
 # Entry point
 if __name__ == "__main__":
@@ -50,8 +49,8 @@ if __name__ == "__main__":
     ]))
 
     for (task, agent, output) in results:
-        print("-----")
         print("")
+        print("-----")
         print(f"{agent}")
         print(output)
 

@@ -15,7 +15,6 @@ file_handler.setFormatter(formatter)
 
 logger.addHandler(file_handler)
 
-
 def create_banking_risk_research_agent() -> Agent:
     logger.info("Creating banking system fragility research agent...")
 

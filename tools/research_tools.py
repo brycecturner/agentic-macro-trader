@@ -22,6 +22,7 @@ def research_tools():
     - Python for quick calculations
     - Structured JSON output formatting
     """
+    
     logger.info("Initializing standard research tools for agents...")
 
     tools = [
