@@ -5,6 +5,7 @@ import asyncio
 
 logger = logging.getLogger(__name__)
 
+
 async def run_parallel_crews(task_agent_pairs: list[tuple]) -> list[str]:
     """
     Runs multiple (agent, task) pairs in parallel and returns their outputs.
@@ -17,9 +18,12 @@ async def run_parallel_crews(task_agent_pairs: list[tuple]) -> list[str]:
     """
     logger.info("Starting parallel execution of research crews...")
 
+    # semaphore = asyncio.Semaphore(3)  # max 3 concurrent requests
+
     async def run_single_crew(task, agent):
         logger.info(f"Launching crew for agent: {agent.role}")
 
+        # async with semaphore:
         crew = Crew(
             agents=[agent],
             tasks=[task],
@@ -27,6 +31,7 @@ async def run_parallel_crews(task_agent_pairs: list[tuple]) -> list[str]:
         )
         output = crew.kickoff()
         logger.info(f"Completed crew for agent: {agent.role}")
+        
         return (task.description, agent.role, output)
 
     # Create coroutine tasks
