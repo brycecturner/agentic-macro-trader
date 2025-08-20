@@ -1,6 +1,8 @@
 import json
 from datetime import datetime
+import logging
 
+logger = logging.getLogger(__name__)
 
 def join_outputs_as_json(results: list[tuple[str, str, str]]) -> str:
     data = [
@@ -17,3 +19,12 @@ def get_current_date_for_prompting() -> str:
     """
     today_str = datetime.utcnow().strftime("%Y-%m-%d")
     return f"Today's date is {today_str}. Please use this as the current date for all time-sensitive reasoning."
+
+def load_schema(path: str) -> dict:
+    """Generic schema loader for tasks/agents."""
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Failed to load schema from {path}: {e}")
+        raise

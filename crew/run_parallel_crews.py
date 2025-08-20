@@ -16,23 +16,23 @@ async def run_parallel_crews(task_agent_pairs: list[tuple]) -> list[str]:
     Returns:
         List of task outputs (strings).
     """
-    logger.info("Starting parallel execution of research crews...")
+    logger.info("Starting parallel execution of crews...")
 
-    # semaphore = asyncio.Semaphore(3)  # max 3 concurrent requests
+    semaphore = asyncio.Semaphore(3)  # max 3 concurrent requests
 
     async def run_single_crew(task, agent):
         logger.info(f"Launching crew for agent: {agent.role}")
 
-        # async with semaphore:
-        crew = Crew(
-            agents=[agent],
-            tasks=[task],
-            verbose=True
-        )
-        output = crew.kickoff()
-        logger.info(f"Completed crew for agent: {agent.role}")
-        
-        return (task.description, agent.role, output)
+        async with semaphore:
+            crew = Crew(
+                agents=[agent],
+                tasks=[task],
+                verbose=True
+            )
+            output = crew.kickoff()
+            logger.info(f"Completed crew for agent: {agent.role}")
+            
+            return (task.description, agent.role, output)
 
     # Create coroutine tasks
     coroutines = [run_single_crew(task, agent) for task, agent in task_agent_pairs]

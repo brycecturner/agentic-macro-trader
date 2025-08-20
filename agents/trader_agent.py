@@ -1,39 +1,29 @@
 import logging
 from crewai import Agent
-from tools.get_current_stock_price import getTickerPrice
+from utils.utils import get_current_date_for_prompting
+from tools.research_tools import research_tools
 
-# Set up logging
-logger = logging.getLogger("TraderAgentLogger")
-logger.setLevel(logging.INFO)
+logger = logging.getLogger(__name__)
 
-file_handler = logging.FileHandler("logs/trader_agent.log")
-file_handler.setLevel(logging.INFO)
+def create_trader_agent() -> Agent:
+    logger.info("Creating trader / hypothesis generator agent...")
 
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-file_handler.setFormatter(formatter)
-
-logger.addHandler(file_handler)
-
-
-def create_trader_agent():
-    logger.info("Initializing Trader Agent.")
-
-    trader_agent = Agent(
-        role="Trader",
+    agent = Agent(
+        role="Multi-Strategy Portfolio Hypothesis Generator",
         goal=(
-            "Evaluate research summaries to decide whether to enter or exit stock positions "
-            "for the current trading day. Follow basic trading logic for an MVP."
+            "Integrate macroeconomic research into actionable investment hypotheses and portfolio strategies. "
+            "Generate coherent trade ideas that reflect potential risks, opportunities, and regime shifts."
         ),
         backstory=(
-            "You are a systematic trader operating within an AI-driven hedge fund. You receive input from the Research Agent."
-            "For each of the stocks sent to you from the research agent, query the most recent stock price use getTickerPrice tool."
-            "You make trade decisions accordingly using price data and research input."
-            "For this MVP, you log trade decisions  instead of executing them."
+            "You are a hedge fund strategist who specializes in turning complex macro research into investable "
+            "trade hypotheses. You analyze signals from global capital flows, central bank policies, fiscal dynamics, "
+            "and systemic risks to propose coherent portfolio strategies."
+            f"{get_current_date_for_prompting()}"
         ),
-        verbose=True,
         allow_delegation=False,
-        tools=[getTickerPrice],  # Add broker API tools in future iterations
+        verbose=True,
+        tools=research_tools(),  # optional, e.g., if you want it to validate with Serper
     )
 
-    logger.info("Trader Agent created.")
-    return trader_agent
+    logger.info("Trader / hypothesis generator agent created successfully.")
+    return agent

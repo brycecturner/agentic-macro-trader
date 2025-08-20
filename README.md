@@ -1,94 +1,137 @@
-# Agentic AI Portfolio Manager - Product Requirements Document (PRD)
+# Agentic AI Portfolio Manager
 
-## Project Name  
-**Agentic AI Portfolio Manager**
-
----
-
-## Purpose
-
-The purpose of this project is to build an automated, **agent-based portfolio management system** that can analyze equities, generate investment recommendations, manage risk, and optionally execute trades on a paper trading account (e.g., Interactive Brokers). The system uses **CrewAI** to coordinate multiple intelligent agents acting like a research analyst, risk manager, and trader — working together to make portfolio decisions more efficient and scalable.
+A modular, agent-based portfolio management system that leverages CrewAI to coordinate research, risk, and trading agents for automated investment analysis and decision-making.
 
 ---
 
-## Core Features
+## 🚀 Overview
 
-| Agent                | Role Description                                                                                  | MVP Status               |
-|----------------------|-------------------------------------------------------------------------------------------------|--------------------------|
-| **Research Agent (TechPod)** | Focuses on technology sector stocks (FAANG: AAPL, MSFT, GOOGL, AMZN, META). Analyzes recent developments and trends to generate actionable insights. | Implemented for MVP       |
-| **Risk Agent**         | Evaluates portfolio risk metrics such as volatility, exposure, and drawdown to manage potential losses. | Planned for future phases |
-| **Trader Agent**       | Places trades based on agent recommendations, interfacing with Interactive Brokers paper trading API. | Planned for future phases |
+**Agentic AI Portfolio Manager** is designed to automate the process of researching, analyzing, and making trading decisions for equity portfolios. The system uses multiple specialized AI agents—each with a distinct role—to collaboratively generate actionable insights and trading recommendations. All agent activities and system events are logged for transparency and future analysis.
 
 ---
 
-## Architecture
+## 🏗️ Architecture
 
-### Tech Stack
+- **Language:** Python 3.11
+- **AI Framework:** [CrewAI](https://github.com/joaomdmoura/crewAI)
+- **Data Access:** [yfinance](https://github.com/ranaroussi/yfinance), Serper API, web scraping tools
+- **Logging:** Python logging module (file-based, logs stored in `/logs`)
+- **Environment:** Conda (`environment.yml` provided)
 
-| Layer         | Technology                                    |
-|---------------|----------------------------------------------|
-| AI Framework  | Python + CrewAI                              |
-| Data Access   | yfinance, requests, or finnhub API            |
-| Trading API   | Interactive Brokers (IB-insync or TWS API)    |
-| Logging       | MVP: Rotating log files using Python logging module <br> Future: PostgreSQL logging backend |
-| Persistence   | CSV or SQLite (Phase 1)                       |
-| Reports       | Text file or CLI printouts                    |
+### Directory Structure
 
----
-
-## Milestones
-
-| Milestone                              | Description                                                       | ETA         |
-|---------------------------------------|-------------------------------------------------------------------|-------------|
-| ✅ Environment Setup                   | Conda environment with CrewAI and logging setup                  | Day 1       |
-| ✅ Data Access Module                  | Market data fetcher using `yfinance`                              | Day 2       |
-| ✅ **TechPod Research Agent MVP**     | Implement single Research Agent focused on technology stocks     | Day 4       |
-| ✅ Crew Assembly                      | Wire TechPod agent and task into CrewAI                           | Day 5       |
-| ✅ File-Based Logging                 | Implement logging to files for all MVP agent activities          | Day 6       |
-| 🟡 Risk Agent Implementation          | Design and develop risk evaluation agent                          | Day 8       |
-| 🟡 Trader Agent Integration            | Connect trader agent to Interactive Brokers paper trading API    | Day 9       |
-| 🟡 Daily Report Generator              | Generate portfolio summary reports                                | Day 10      |
-| 🟡 PostgreSQL Logging (Future)         | Upgrade logging infrastructure to Postgres for queryability      | Post-MVP    |
+```
+.
+├── agents/           # Agent definitions (research, risk, trader)
+├── crew/             # Crew assembly and parallel execution logic
+├── logs/             # Log files for each agent and crew
+├── tasks/            # Task definitions for each agent
+├── tools/            # Utility tools (web search, scraping, price fetch)
+├── utils/            # Utility functions (date, output formatting)
+├── main.py           # Entry point for running the system
+├── research_summary.json # Output: structured research results
+├── environment.yml   # Conda environment specification
+├── .env              # API keys and environment variables
+└── README.md         # Project documentation
+```
 
 ---
 
-## Requirements
+## 🧠 Agents & Roles
 
-### Functional Requirements
-
-- [x] Implement **TechPod Research Agent** focusing on FAANG technology stocks.
-- [ ] Design and implement Risk Agent to calculate portfolio risk metrics.
-- [ ] Design and implement Trader Agent to execute trades via Interactive Brokers paper account.
-- [ ] CrewAI must coordinate agents and tasks.
-- [ ] Market data should be fetched live using `yfinance` or other APIs.
-- [x] File-based logging must capture all agent activities and system events.
-- [ ] Daily portfolio summary reports must be generated.
-
-### Non-Functional Requirements
-
-- Python 3.10 or 3.11
-- Modular codebase for easy agent extension
-- Logs stored in `logs/` folder with daily rotation
-- Logging format should support future migration to PostgreSQL backend
+| Agent Name                  | Role Description                                                                                   |
+|-----------------------------|---------------------------------------------------------------------------------------------------|
+| **Research Agents**         | Analyze macroeconomic, sector, and market data to generate actionable insights.                   |
+| **Risk Agent** (planned)    | Evaluate portfolio risk metrics (volatility, exposure, drawdown).                                 |
+| **Trader Agent**            | Make trading decisions based on research output and live market data.                             |
 
 ---
 
-## File Structure (Initial)
+## ⚙️ Features
 
-agentic-portfolio/
-├── agents/
-│ ├── research_agent.py #   TechPod Research Agent (MVP)
-│ ├── risk_agent.py # Risk evaluation agent (planned)
-│ └── trader_agent.py # Trader agent for order execution (planned)
-├── tasks/
-│ ├── research_tasks.py # Tasks for Research Agent
-│ ├── risk_tasks.py # Tasks for Risk Agent (planned)
-│ └── trader_tasks.py # Tasks for Trader Agent (planned)
-├── crew/
-│ └── crew_setup.py # Assembles Crew with all agents & tasks
-├── logging/
-│ └── logger.py # Handles file-based logging
-├── logs/
-│ └── TechPod.log # Log file for TechPod Research Agent
-├── main.py # Entry point to kickoff MVP crew
-└── environment.yml # Conda environment file
+- **Automated Research:** Multiple research agents analyze macro trends, banking risk, capital flows, fiscal policy, growth, and inflation.
+- **Parallel Execution:** Research tasks run concurrently for efficiency.
+- **Live Data Integration:** Fetches current stock prices and market data using yfinance and web tools.
+- **Structured Output:** Results are saved as structured JSON for downstream use.
+- **Logging:** All agent actions and system events are logged to files in `/logs`.
+- **Modular Design:** Easily extendable to add new agents, tasks, or tools.
+
+---
+
+## 🏁 Getting Started
+
+### 1. Clone the Repository
+
+```sh
+git clone https://github.com/yourusername/agentic-portfolio.git
+cd agentic-portfolio
+```
+
+### 2. Set Up the Environment
+
+```sh
+conda env create -f environment.yml
+conda activate project-2
+```
+
+### 3. Configure API Keys
+
+- Copy `.env.example` to `.env` and fill in your `OPENAI_API_KEY` and `SERPER_API_KEY`.
+
+### 4. Run the System
+
+```sh
+python main.py
+```
+
+- Research agents will run in parallel.
+- Results will be printed to the console and saved to `research_summary.json`.
+- Logs will be written to the `/logs` directory.
+
+---
+
+## 📝 Example Output
+
+- **Structured research summaries** in `research_summary.json`
+- **Log files** for each agent and crew in `/logs`
+
+---
+
+## 🛠️ Extending the System
+
+- **Add new agents:** Define in `agents/`
+- **Add new tasks:** Define in `tasks/`
+- **Add new tools:** Place in `tools/` and register with agents as needed
+
+---
+
+## 📚 References
+
+- [CrewAI Documentation](https://docs.crewai.com/)
+- [yfinance Documentation](https://github.com/ranaroussi/yfinance)
+- [Serper API](https://serper.dev/)
+
+---
+
+## 📝 License
+
+MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## 👤 Author
+
+Bryce Turner
+
+---
+
+## 💡 Future Work
+
+- Implement Risk Agent for portfolio risk analysis
+- Integrate Trader Agent with Interactive Brokers API for live/paper trading
+- Add daily portfolio summary reports
+- Upgrade logging to PostgreSQL for advanced analytics
+
+---
+
+*For questions or contributions, please open an issue or pull

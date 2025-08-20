@@ -43,11 +43,10 @@ def create_research_fed_policy_task() -> Task:
             f"{get_current_date_for_prompting()}"
         ),
         expected_output=(
-            "A structured summary including:"
-            "- Key fragility indicators and which institutions or regions are most exposed"
+            "A structured, 3-5 paragraph long summary including:"
             "- 2–3 specific examples of concerning trends"
             "- Citations of relevant data or sources"
-            "- A brief commentary on potential contagion channels or systemic implications"
+            "- A commentary on potential paths to monetary policy, include what the market is currently pricing in"
         ),
         verbose=True,
         async_execution = True,
@@ -71,7 +70,7 @@ def create_research_banking_risk_task() -> Task:
         f"{get_current_date_for_prompting()}"
     ),
     expected_output=(
-        "A structured summary including:"
+        "A structured, 3-5 paragraph long summary including:"
         "- Key fragility indicators and which institutions or regions are most exposed"
         "- 2–3 specific examples of concerning trends"
         "- Citations of relevant data or sources"
@@ -100,11 +99,12 @@ def create_research_global_capital_flows_task() -> Task:
             f"{get_current_date_for_prompting()}"
         ),
         expected_output=(
-            "A structured summary including:\n"
-            "- Key capital flow trends and their regional or asset-specific concentration\n"
-            "- 2–3 illustrative examples with data-driven support\n"
-            "- Relevant institutional commentary or policy responses\n"
+            "A structured, 3-5 paragraph long summary including:"
+            "- Key capital flow trends and their regional or asset-specific concentration"
+            "- 2–3 illustrative examples with data-driven support"
+            "- Relevant institutional commentary or policy responses"
             "- Potential implications for exchange rates, bond markets, or systemic liquidity"
+            "- Citations of relevant data or sources"
         ),
         verbose=True,
         async_execution=True,
@@ -126,10 +126,10 @@ def create_research_fiscal_policy_task() -> Task:
             f"{get_current_date_for_prompting()}"
         ),
         expected_output=(
-            "A structured summary including:\n"
-            "- Overview of fiscal risk indicators in key economies\n"
-            "- 2–3 examples of countries with deteriorating or improving fiscal trends\n"
-            "- Commentary on potential rating actions, crowding out effects, or inflationary pressures\n"
+            "A structured, 3-5 paragraph long summary including:"
+            "- Overview of fiscal risk indicators in key economies"
+            "- 2–3 examples of countries with deteriorating or improving fiscal trends"
+            "- Commentary on potential rating actions, crowding out effects, or inflationary pressures"
             "- Citations of official data or credible reports"
         ),
         verbose=True,
@@ -151,11 +151,12 @@ def create_research_macro_growth_task() -> Task:
             f"{get_current_date_for_prompting()}"
         ),
         expected_output=(
-            "A structured summary including:\n"
-            "- Key changes in macro indicators across major regions\n"
-            "- Notable surprises (positive or negative) in recent releases\n"
-            "- Implications for growth forecasts or risk sentiment\n"
+            "A structured, 3-5 paragraph long summary including:"
+            "- Key changes in macro indicators across major regions"
+            "- Notable surprises (positive or negative) in recent releases"
+            "- Implications for growth forecasts or risk sentiment"
             "- Sourced commentary from institutions or analysts"
+            "- Citations of official data or credible reports"
         ),
         verbose=True,
         async_execution=True,
@@ -176,10 +177,10 @@ def create_research_macro_inflation_task() -> Task:
             f"{get_current_date_for_prompting()}"
         ),
         expected_output=(
-            "A structured summary including:\n"
-            "- Trends in inflation vs. labor market strength\n"
-            "- Any signs of wage-price spirals or disinflation\n"
-            "- Market or policy expectations based on recent prints\n"
+            "A structured, 3-5 paragraph long summary including:"
+            "- Trends in inflation vs. labor market strength"
+            "- Any signs of wage-price spirals or disinflation"
+            "- Market or policy expectations based on recent prints"
             "- Cited data sources (e.g., BLS, media, analyst reports)"
         ),
         verbose=True,
