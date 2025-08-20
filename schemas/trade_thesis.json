@@ -21,7 +21,7 @@
         "description": "Details that can be passed to a portfolio-building agent",
         "properties": {
           "asset_class": { "type": "string" },
-          "instruments": { "type": "array", "items": { "type": "string" } },
+          "sample_instruments": { "type": "array", "items": { "type": "string" } },
           "direction": { "type": "string", "enum": ["long", "short"] },
           "sizing": { "type": "string" }
         },
