@@ -1,0 +1,27 @@
+{
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Short title for the trade thesis"
+    },
+    "brief_description": {
+      "type": "string",
+      "description": "One-sentence summary of the thesis"
+    },
+    "detailed_description": {
+      "type": "string",
+      "description": "In-depth explanation including rationale, risks, and catalysts. This should be significantly more comprehensive and detailed than the brief description."
+    },
+    "portfolio_instructions": {
+      "type": "object",
+      "description": "Details that can be passed to a portfolio-building agent",
+      "properties": {
+        "asset_class": { "type": "string" },
+        "instruments": { "type": "array", "items": { "type": "string" } },
+        "direction": { "type": "string", "enum": ["long", "short"] }
+      },
+      "required": ["asset_class", "instruments", "direction"]
+    }
+  },
+  "required": ["name", "brief_description", "detailed_description", "portfolio_instructions"]
+}

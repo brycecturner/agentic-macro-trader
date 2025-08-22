@@ -42,28 +42,28 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-async def refine_hypotheses(trader_hypotheses):
-    """Run critic + refiner agents on each trader hypothesis in parallel."""
+async def refine_hypotheses(hypotheses: list[dict]) -> list[tuple[str, str, str]]:
+    """Run critic + refiner agents on each hypothesis in parallel."""
     crews = []
-    for hyp in trader_hypotheses:
+    for hyp in hypotheses:
         hyp_json = json.dumps(hyp)
 
         crews.append((create_critic_task(hyp_json), create_critic_agent()))
         crews.append((create_refiner_task(hyp_json), create_refiner_agent()))
         
     results = await run_parallel_crews(crews)
-
     return results
+
 
 async def main():
     # 1. Run research agents in parallel
     results = await run_parallel_crews([
         (create_research_fed_policy_task(), create_fed_policy_research_agent()),
-        # (create_research_banking_risk_task(), create_banking_risk_research_agent()),
-        # (create_research_global_capital_flows_task(), create_global_capital_flows_research_agent()),
-        # (create_research_fiscal_policy_task(), create_fiscal_policy_research_agent()),
-        # (create_research_macro_growth_task(), create_macro_growth_research_agent()),
-        # (create_research_macro_inflation_task(), create_macro_inflation_research_agent()),
+        (create_research_banking_risk_task(), create_banking_risk_research_agent()),
+        (create_research_global_capital_flows_task(), create_global_capital_flows_research_agent()),
+        (create_research_fiscal_policy_task(), create_fiscal_policy_research_agent()),
+        (create_research_macro_growth_task(), create_macro_growth_research_agent()),
+        (create_research_macro_inflation_task(), create_macro_inflation_research_agent()),
     ])
 
     # 2. Save research results JSON
@@ -95,7 +95,9 @@ async def main():
 
     # 5. Run critic + refiner agents for each hypothesis
     if trader_hypotheses:
-        final_results = await refine_hypotheses(trader_hypotheses)
+        logger.info(f"Refining {len(trader_hypotheses['items'])} trader hypotheses...")
+    
+        final_results = await refine_hypotheses(trader_hypotheses['items'])
 
         refined_outputs = []
         critic_outputs = []
@@ -106,6 +108,7 @@ async def main():
                     refined_outputs.append(json.loads(crew_out.raw))
                 except Exception:
                     refined_outputs.append({"raw": crew_out.raw})
+
             elif "Critic" in str(agent):  # Save critic results separately
                 try:
                     critic_outputs.append(json.loads(crew_out.raw))

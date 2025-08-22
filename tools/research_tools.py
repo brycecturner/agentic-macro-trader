@@ -36,4 +36,7 @@ def research_tools():
     logger.info(f"Loaded {len(tools)} research tools: {[tool.__class__.__name__ for tool in tools]}")
     return tools
 
-
+def serper_logic_for_query():
+    return (
+        "Use the Serper tool to search the web for relevant information. Formulate your query based on the research topic and use the tool to gather up-to-date data. Analyze the search results and extract key insights to inform your research. When invoking the SerperDevTool, pass only simple text strings."
+    )

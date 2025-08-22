@@ -14,7 +14,7 @@
       },
       "detailed_description": {
         "type": "string",
-        "description": "In-depth explanation including rationale, risks, and catalysts"
+        "description": "In-depth explanation including rationale, risks, and catalysts. This should be significantly more comprehensive and detailed than the brief description"
       },
       "portfolio_instructions": {
         "type": "object",

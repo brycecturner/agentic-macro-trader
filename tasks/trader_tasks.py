@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def create_trader_task(research_summary_json: dict) -> Task:
     logger.info("Creating trader task...")
 
-    schema = load_schema("schemas/trade_thesis.json")
+    schema = load_schema("schemas/raw_trade_thesis.json")
 
     task = Task(
         agent = create_trader_agent(),
