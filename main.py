@@ -5,7 +5,7 @@ import json
 import logging
 
 from crew.run_parallel_crews import run_parallel_crews
-from utils.utils import join_outputs_as_json
+from utils.utils import join_outputs_as_json,normalize_trader_hypotheses
 
 from tasks.research_tasks import (
     create_research_fed_policy_task,
@@ -40,6 +40,10 @@ from tasks.refine_hypothesis_tasks import (
     create_falsification_task
 )
 
+# implementation imports
+from tasks.implementation_tasks import create_portfolio_task
+from agents.implementation_agents import create_portfolio_agent
+
 # Load environment variables
 load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
@@ -58,9 +62,10 @@ async def refine_hypotheses(hypotheses: list[dict]) -> list[tuple[str, str, str]
 
         crews.append((create_critic_task(hyp_json), create_critic_agent()))
         crews.append((create_refiner_task(hyp_json), create_refiner_agent()))
+        crews.append((create_portfolio_task(), create_portfolio_agent()))
         
         #TODO - Implement falsification agent/task
-        #crews.append(create_falsification_task, create_falsification_agent())
+        #crews.append(create_falsification_task(), create_falsification_agent())
 
         #TODO 
         #crews.append(create_portfolio_task(hyp_json), create_portfolio_agent()))
@@ -95,7 +100,8 @@ async def main():
     _, _, crew_out = trader_output[0]
 
     # 4. Save trader hypotheses
-    trader_hypotheses = None
+    trader_hypotheses = normalize_trader_hypotheses(crew_out)
+
     with open("results/trader_hypotheses.json", "w") as f:
         if isinstance(crew_out.raw, str):
             try:
@@ -111,12 +117,13 @@ async def main():
 
     # 5. Run critic + refiner agents for each hypothesis
     if trader_hypotheses:
-        logger.info(f"Refining {len(trader_hypotheses['items'])} trader hypotheses...")
+        logger.info(f"Refining {len(trader_hypotheses)} trader hypotheses...")
     
-        refined_hypotheses = await refine_hypotheses(trader_hypotheses['items'])
+        refined_hypotheses = await refine_hypotheses(trader_hypotheses)
 
         refined_outputs = []
         critic_outputs = []
+        portfolio_output = []
 
         for (_, agent, crew_out) in refined_hypotheses:
             if "Refiner" in str(agent):  # Save refiner results
@@ -130,6 +137,12 @@ async def main():
                     critic_outputs.append(json.loads(crew_out.raw))
                 except Exception:
                     critic_outputs.append({"raw": crew_out.raw})
+        
+            elif " Portfolio Construction" in str(agent):
+                try:
+                    portfolio_output.append(json.loads(crew_out.raw))
+                except Exception:
+                    portfolio_output.append({"raw": crew_out.raw})
 
         # Save only refined trade theses
         with open("results/refined_hypotheses.json", "w") as f:
@@ -138,6 +151,10 @@ async def main():
         # Optional: save critics for debugging
         with open("results/critic_feedback.json", "w") as f:
             json.dump(critic_outputs, f, indent=2)
+        
+        # Save portfolio output
+        with open("results/portfolio.json", "w") as f:
+            json.dump(portfolio_output, f, indent=2)
 
         logger.info("Saved refined hypotheses and critic feedback")
         

@@ -1,0 +1,35 @@
+{
+    "name": "portfolio_schema",
+    "schema": {
+        "type": "object",
+        "properties": {
+            "assets": {
+                "type": "array",
+                "description": "List of assets included in the portfolio",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "ticker": {"type": "string", "description": "Asset ticker symbol"},
+                        "weight": {"type": "number", "description": "Weight of the asset in the portfolio (0–1)"},
+                        "rationale": {"type": "string", "description": "Reason for including the asset"}
+                    },
+                    "required": ["ticker", "weight", "rationale"]
+                }
+            },
+            "risk_metrics": {
+                "type": "object",
+                "properties": {
+                    "expected_volatility": {"type": "number", "description": "Expected annualized volatility %"},
+                    "expected_drawdown": {"type": "number", "description": "Expected max drawdown %"},
+                    "correlations_considered": {"type": "string", "description": "Notes on correlation management"}
+                },
+                "required": ["expected_volatility", "expected_drawdown"]
+            },
+            "portfolio_objective": {
+                "type": "string",
+                "description": "High-level statement of what this portfolio is designed to achieve (e.g., 'express bearish USD view')."
+            }
+        },
+        "required": ["assets", "risk_metrics", "portfolio_objective"]
+    }
+}
