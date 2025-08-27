@@ -4,7 +4,11 @@ from crewai import Task
 import logging
 from tools.research_tools import research_tools, serper_logic_for_query
 from utils.utils import get_current_date_for_prompting, load_schema
-from agents.hypothesis_refining_agents import create_critic_agent, create_refiner_agent
+from agents.hypothesis_refining_agents import (
+    create_critic_agent, 
+    create_refiner_agent,
+    create_falsification_agent
+)
 
 logger = logging.getLogger(__name__)
 
@@ -55,4 +59,34 @@ def create_refiner_task(hypothesis_json: str):
         verbose = True,
         async_execution = True,
         # tools = research_tools()
+    )
+
+
+def create_falsification_task(refined_hypothesis: str):
+    """
+    Task for falsification agent: analyze a refined hypothesis and produce
+    a JSON output describing conditions under which it would be invalidated.
+    """
+    logger.info("Creating Falsification Task for refined hypothesis")
+
+
+    schema = load_schema("schemas/falsification_trade_thesis.json")
+
+    return Task(
+        description=(
+            "Given the following refined hypothesis, determine clear conditions that would "
+            "invalidate it (falsification criteria). These may include:"
+            "- Threshold movements in financial indices"
+            "- Combined patterns across multiple indices (bundles)"
+            "- News or policy headlines"
+            "- Unexpected economic data releases"
+            "- Other exogenous shocks or events"
+            "Provide the output in structured JSON strictly following the falsification_schema."
+        ),
+        agent=create_falsification_agent(),
+        expected_output=(
+            "The output must strictly follow this JSON schema:"
+            f"{schema}"
+            "where the name property matches the hypothesis name exactly."
+        ),
     )

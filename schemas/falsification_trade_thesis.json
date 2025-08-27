@@ -1,0 +1,40 @@
+{
+    "name": "falsification_schema",
+    "schema": {
+        "type": "object",
+        "properties": {
+            "index_triggers": {
+                "type": "object",
+                "description": "Index thresholds that would invalidate the hypothesis.",
+                "additionalProperties": {
+                    "type": "string",
+                    "description": "Condition for this index, e.g. 'S&P500: rally +7% within 1 month'."
+                }
+            },
+            "macro_triggers": {
+                "type": "array",
+                "description": "Macroeconomic data conditions that would invalidate the hypothesis.",
+                "items": {
+                    "type": "string",
+                    "description": "Example: 'US CPI falls below 2% YoY for 2 months'."
+                }
+            },
+            "headline_triggers": {
+                "type": "array",
+                "description": "News or policy headlines that would invalidate the hypothesis.",
+                "items": {
+                    "type": "string",
+                    "description": "Example: 'Fed announces emergency dovish policy shift'."
+                }
+            },
+            "other_triggers": {
+                "type": "array",
+                "description": "Other unexpected events or risks not covered above.",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
+        "required": ["index_triggers", "macro_triggers", "headline_triggers", "other_triggers"]
+    }
+}

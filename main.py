@@ -24,13 +24,21 @@ from agents.research_agents import (
     create_macro_inflation_research_agent,
 )
 
-# NEW trader imports
+# rader imports
 from tasks.trader_tasks import create_trader_task
 from agents.trader_agent import create_trader_agent
 
-# NEW refining imports
-from agents.hypothesis_refining_agents import create_critic_agent, create_refiner_agent
-from tasks.refine_hypothesis_tasks import create_critic_task, create_refiner_task
+# refining imports
+from agents.hypothesis_refining_agents import (
+    create_critic_agent, 
+    create_refiner_agent,
+    create_falsification_agent
+)
+from tasks.refine_hypothesis_tasks import (
+    create_critic_task, 
+    create_refiner_task,
+    create_falsification_task
+)
 
 # Load environment variables
 load_dotenv()
@@ -51,6 +59,14 @@ async def refine_hypotheses(hypotheses: list[dict]) -> list[tuple[str, str, str]
         crews.append((create_critic_task(hyp_json), create_critic_agent()))
         crews.append((create_refiner_task(hyp_json), create_refiner_agent()))
         
+        #TODO - Implement falsification agent/task
+        #crews.append(create_falsification_task, create_falsification_agent())
+
+        #TODO 
+        #crews.append(create_portfolio_task(hyp_json), create_portfolio_agent()))
+        #crews.append(create_risk_management_task(hyp_json), create_risk_management_agent()))
+        #crews.append(create_implementation_task(hyp_json), create_implementation_agent()))
+        
     results = await run_parallel_crews(crews)
     return results
 
@@ -59,11 +75,11 @@ async def main():
     # 1. Run research agents in parallel
     results = await run_parallel_crews([
         (create_research_fed_policy_task(), create_fed_policy_research_agent()),
-        (create_research_banking_risk_task(), create_banking_risk_research_agent()),
-        (create_research_global_capital_flows_task(), create_global_capital_flows_research_agent()),
-        (create_research_fiscal_policy_task(), create_fiscal_policy_research_agent()),
-        (create_research_macro_growth_task(), create_macro_growth_research_agent()),
-        (create_research_macro_inflation_task(), create_macro_inflation_research_agent()),
+        # (create_research_banking_risk_task(), create_banking_risk_research_agent()),
+        # (create_research_global_capital_flows_task(), create_global_capital_flows_research_agent()),
+        # (create_research_fiscal_policy_task(), create_fiscal_policy_research_agent()),
+        # (create_research_macro_growth_task(), create_macro_growth_research_agent()),
+        # (create_research_macro_inflation_task(), create_macro_inflation_research_agent()),
     ])
 
     # 2. Save research results JSON
@@ -97,12 +113,12 @@ async def main():
     if trader_hypotheses:
         logger.info(f"Refining {len(trader_hypotheses['items'])} trader hypotheses...")
     
-        final_results = await refine_hypotheses(trader_hypotheses['items'])
+        refined_hypotheses = await refine_hypotheses(trader_hypotheses['items'])
 
         refined_outputs = []
         critic_outputs = []
 
-        for (_, agent, crew_out) in final_results:
+        for (_, agent, crew_out) in refined_hypotheses:
             if "Refiner" in str(agent):  # Save refiner results
                 try:
                     refined_outputs.append(json.loads(crew_out.raw))
