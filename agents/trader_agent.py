@@ -11,7 +11,7 @@ def create_trader_agent() -> Agent:
     agent = Agent(
         role="Multi-Strategy Portfolio Hypothesis Generator",
         goal=(
-            "Integrate macroeconomic research into actionable investment hypotheses and portfolio strategies. "
+            "Integrate macroeconomic research into an actionable investment hypothesis and portfolio strategy. "
             "Generate coherent trade ideas that reflect potential risks, opportunities, and regime shifts."
         ),
         backstory=(
@@ -22,7 +22,7 @@ def create_trader_agent() -> Agent:
         ),
         allow_delegation=False,
         verbose=True,
-        tools=research_tools(),  # optional, e.g., if you want it to validate with Serper
+        # tools=research_tools(),  
     )
 
     logger.info("Trader / hypothesis generator agent created successfully.")

@@ -49,20 +49,34 @@ load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY")
 
+
 # Logging setup
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("MainLogger")
+logger.setLevel(logging.INFO)
+
+file_handler = logging.FileHandler("logs/main.log")
+file_handler.setLevel(logging.INFO)
+
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
+
+
 
 
 async def refine_hypotheses(hypotheses: list[dict]) -> list[tuple[str, str, str]]:
     """Run critic + refiner agents on each hypothesis in parallel."""
     crews = []
     for hyp in hypotheses:
+        logger.info(f"Refining hypothesis: {hyp}")
         hyp_json = json.dumps(hyp)
+        logger.info(f"Hypothesis JSON: {hyp_json}")
 
         crews.append((create_critic_task(hyp_json), create_critic_agent()))
         crews.append((create_refiner_task(hyp_json), create_refiner_agent()))
-        crews.append((create_portfolio_task(), create_portfolio_agent()))
+        # crews.append((create_portfolio_task(), create_portfolio_agent()))
         
         #TODO - Implement falsification agent/task
         #crews.append(create_falsification_task(), create_falsification_agent())
@@ -98,10 +112,12 @@ async def main():
         (create_trader_task(result_json), create_trader_agent()),
     ])
     _, _, crew_out = trader_output[0]
+    logger.info("Trader agent completed.")
+    logger.info(f"Trader Output: {crew_out.raw}")
 
     # 4. Save trader hypotheses
     trader_hypotheses = normalize_trader_hypotheses(crew_out)
-
+    logger.info(f"Normalized {len(trader_hypotheses)} trader hypotheses.")
     with open("results/trader_hypotheses.json", "w") as f:
         if isinstance(crew_out.raw, str):
             try:

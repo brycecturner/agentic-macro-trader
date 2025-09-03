@@ -16,10 +16,10 @@ def create_trader_task(research_summary_json: dict) -> Task:
         agent = create_trader_agent(),
         description=(
             "Using the following summarized macro research, generate a possible "
-            "trading hypotheses and portfolio strategy:\n"
+            "trading hypothesis and portfolio strategy:\n"
             f"{research_summary_json}\n\n"
             "Your output should:\n"
-            "- Propose 1one distinct macro hypotheses\n"
+            "- Propose one distinct macro hypotheses\n"
             "- Suggest corresponding trade expressions (e.g., equities, rates, FX, commodities)\n"
             "- Include reasoning (macro drivers, risks, catalysts)\n"
             "- Identify key risk factors and alternative scenarios\n"

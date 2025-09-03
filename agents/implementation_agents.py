@@ -17,7 +17,7 @@ def create_portfolio_agent():
         role="Portfolio Construction Strategist",
         goal="Translate refined trade hypotheses into an actionable portfolio with weights and risk controls.",
         backstory=(
-            "You are a portfolio manager who specializes in multi-asset allocation. "
+            "You are an experienced portfolio manager who specializes in multi-asset allocation. "
             "Given a set of refined trade hypotheses, you build a coherent portfolio "
             "that balances conviction with diversification and risk management. "
             "Your output should be structured with tickers, weights, risk metrics, "
@@ -25,5 +25,4 @@ def create_portfolio_agent():
         ),
         allow_delegation=False,
         verbose=True,
-        llm="gpt-4o-mini"
     )

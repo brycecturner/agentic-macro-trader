@@ -39,6 +39,9 @@ def normalize_trader_hypotheses(raw):
     if isinstance(raw, str):
         try:
             raw = json.loads(raw)
+            for key in ['items', 'hypotheses', 'data']:
+                if key in raw and isinstance(raw[key], dict):
+                    return raw[key]
         except Exception:
             return []
 

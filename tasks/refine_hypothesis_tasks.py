@@ -16,6 +16,8 @@ logger = logging.getLogger(__name__)
 
 def create_critic_task(hypothesis_json: str):
     logger.info("Creating Critic Task for one hypothesis")
+    logger.info(f"Hypothesis JSON: {hypothesis_json}")
+
     return Task(
         agent=create_critic_agent(),
         description=(
@@ -33,14 +35,15 @@ def create_critic_task(hypothesis_json: str):
 
 def create_refiner_task(hypothesis_json: str):
     logger.info("Creating Refiner Task for one hypothesis")
+    logger.info(f"Hypothesis JSON: {hypothesis_json}")
 
     schema = load_schema("schemas/final_trade_thesis.json")
 
     return Task(
         agent = create_refiner_agent(),
         description=(
-            f"You are given ONE trading hypothesis: {hypothesis_json}, and ONE critique from the previous agent."
-            f"Refine the hypothesis into a more robust trade thesis by addressing the critiques."
+            f"You are given ONE trading hypothesis: {hypothesis_json}, and the critique from the previous agent."
+            f"Refine the hypothesis into a more robust trade thesis by addressing the critiques while keeping the core idea intact."
             "Your output should:"
             "- Propose one refined, distinct macro hypotheses"
             "- Describe the macro drivers and risks"

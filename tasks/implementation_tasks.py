@@ -24,7 +24,7 @@ def create_portfolio_task():
             f"Refined Hypotheses comes from the previous agent.\n"
             "Return output strictly matching the portfolio_schema."
         ),
-        agent=create_portfolio_agent(),  # dynamically attached later
+        agent=create_portfolio_agent(),
         expected_output=(
             "The output must strictly follow this JSON schema:\n"
             f"{schema}"
