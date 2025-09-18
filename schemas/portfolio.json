@@ -10,6 +10,7 @@
                     "type": "object",
                     "properties": {
                         "ticker": {"type": "string", "description": "Asset ticker symbol"},
+                        "ticker_name": {"type": "string", "description": "Full name of the asset (optional)"},
                         "weight": {"type": "number", "description": "Weight of the asset in the portfolio (0–1)"},
                         "rationale": {"type": "string", "description": "Reason for including the asset"}
                     },

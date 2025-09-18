@@ -63,12 +63,10 @@ file_handler.setFormatter(formatter)
 
 logger.addHandler(file_handler)
 
-
-
-
 async def refine_hypotheses(hypotheses: list[dict]) -> list[tuple[str, str, str]]:
     """Run critic + refiner agents on each hypothesis in parallel."""
     crews = []
+    
     for hyp in hypotheses:
         logger.info(f"Refining hypothesis: {hyp}")
         hyp_json = json.dumps(hyp)
@@ -76,7 +74,7 @@ async def refine_hypotheses(hypotheses: list[dict]) -> list[tuple[str, str, str]
 
         crews.append((create_critic_task(hyp_json), create_critic_agent()))
         crews.append((create_refiner_task(hyp_json), create_refiner_agent()))
-        # crews.append((create_portfolio_task(), create_portfolio_agent()))
+        crews.append((create_portfolio_task(), create_portfolio_agent()))
         
         #TODO - Implement falsification agent/task
         #crews.append(create_falsification_task(), create_falsification_agent())
@@ -88,7 +86,6 @@ async def refine_hypotheses(hypotheses: list[dict]) -> list[tuple[str, str, str]
         
     results = await run_parallel_crews(crews)
     return results
-
 
 async def main():
     # 1. Run research agents in parallel
@@ -111,25 +108,18 @@ async def main():
     trader_output = await run_parallel_crews([
         (create_trader_task(result_json), create_trader_agent()),
     ])
-    _, _, crew_out = trader_output[0]
-    logger.info("Trader agent completed.")
-    logger.info(f"Trader Output: {crew_out.raw}")
 
-    # 4. Save trader hypotheses
-    trader_hypotheses = normalize_trader_hypotheses(crew_out)
+    # trader_hypotheses = join_outputs_as_json(trader_output)
+
+    trader_hypotheses = [
+        {"agent": agent_role, "output": output.raw}
+        for task_desc, agent_role, output in results
+    ]
+
+    logger.info("Normalized trader hypotheses.")
+    logger.info(f"Trader hypotheses type: {type(trader_hypotheses)}")
+    logger.info(f"Trader hypotheses: {trader_hypotheses}")
     logger.info(f"Normalized {len(trader_hypotheses)} trader hypotheses.")
-    with open("results/trader_hypotheses.json", "w") as f:
-        if isinstance(crew_out.raw, str):
-            try:
-                trader_hypotheses = json.loads(crew_out.raw)
-                json.dump(trader_hypotheses, f, indent=2)
-            except Exception:
-                f.write(crew_out.raw)
-        else:
-            trader_hypotheses = crew_out.raw
-            json.dump(trader_hypotheses, f, indent=2)
-
-    logger.info("Saved trader hypotheses to results/trader_hypotheses.json")
 
     # 5. Run critic + refiner agents for each hypothesis
     if trader_hypotheses:
@@ -154,7 +144,7 @@ async def main():
                 except Exception:
                     critic_outputs.append({"raw": crew_out.raw})
         
-            elif " Portfolio Construction" in str(agent):
+            elif "Portfolio Construction" in str(agent):
                 try:
                     portfolio_output.append(json.loads(crew_out.raw))
                 except Exception:

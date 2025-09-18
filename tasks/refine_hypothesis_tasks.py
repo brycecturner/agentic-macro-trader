@@ -25,6 +25,8 @@ def create_critic_task(hypothesis_json: str):
             "Critique this hypothesis by identifying weaknesses, risks not accounted for, "
             "and assumptions that may fail."
             f"{serper_logic_for_query()}"
+            "Serper Queries should be used to fact-check any claims made in the hypothesis."
+            "Any Serper Quesries should be relevant to the hypothesis and its components."
         ),
         expected_output="A summary of critiques.",
         verbose = True,
