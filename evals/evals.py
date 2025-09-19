@@ -21,4 +21,17 @@ def fetch_historical_data(ticker, period="5y", interval="1d"):
         print(f"Error fetching data for {ticker}: {e}")
         return pd.DataFrame()
     
-#fetch_historical_data("AAPL", period="30d", interval="1d")
+def calc_max_drawdown(prices):
+    """
+    Calculate the maximum drawdown of a price series.
+    
+    Args:
+        prices (pd.Series): A pandas Series of prices.
+    
+    Returns:
+        float: The maximum drawdown as a decimal (e.g., 0.2 for 20%).
+    """
+    roll_max = prices.cummax()
+    drawdown = (prices - roll_max) / roll_max
+    max_dd = drawdown.min()
+    return max_dd

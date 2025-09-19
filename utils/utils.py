@@ -41,7 +41,7 @@ def normalize_trader_hypotheses(raw):
             raw = json.loads(raw)
             for key in ['items', 'hypotheses', 'data']:
                 if key in raw and isinstance(raw[key], dict):
-                    return [raw[key]]
+                    return raw[key]
         except Exception:
             return []
 
