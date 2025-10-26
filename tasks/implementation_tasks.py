@@ -16,12 +16,10 @@ def create_portfolio_task():
 
     return Task(
         description=(
-            "You are given a set of refined trade hypotheses. "
-            "Your job is to translate them into a structured portfolio, "
-            "including asset tickers, weights, and rationale. "
-            "You should also provide portfolio-level risk metrics and "
-            "a clear portfolio objective.\n\n"
-            "Refined Hypotheses comes from the previous agent.\n"
+            "You are given a refined trade hypotheses."
+            "Your job is to translate them into a structured portfolio,"
+            "including asset tickers, weights, and rationale."
+            "The portfolio must be specifically relevant to the given hypotheses, and not generic."
             "Return output strictly matching the portfolio_schema."
         ),
         agent=create_portfolio_agent(),

@@ -49,11 +49,10 @@ def create_refiner_task(hypothesis_json: str):
             "Your output should:"
             "- Propose one refined, distinct macro hypotheses"
             "- Describe the macro drivers and risks"
-            "- Suggest corresponding trade expressions (e.g., equities, rates, FX, commodities)"
+            "- Suggest corresponding trade expressions (e.g., equities, rates, spreads, FX, commodities)"
             "- Include reasoning (macro drivers, risks, catalysts)"
             "- Identify key risk factors and alternative scenarios"
             "- Provide a clear investment thesis"
-            # f"{serper_logic_for_query()}"
             f"{get_current_date_for_prompting()}"
         ),
         expected_output=(

@@ -18,10 +18,9 @@ def create_portfolio_agent():
         goal="Translate refined trade hypotheses into an actionable portfolio with weights and risk controls.",
         backstory=(
             "You are an experienced portfolio manager who specializes in multi-asset allocation. "
-            "Given a set of refined trade hypotheses, you build a coherent portfolio "
+            "Given a single refined trade hypotheses, you build a coherent portfolio "
             "that balances conviction with diversification and risk management. "
-            "Your output should be structured with tickers, weights, risk metrics, "
-            "and a clear objective."
+            "You provide clear justifications for each position and its weight in the portfolio."
         ),
         allow_delegation=False,
         verbose=True,

@@ -17,7 +17,8 @@ def create_trader_agent() -> Agent:
         backstory=(
             "You are a hedge fund strategist who specializes in turning complex macro research into investable "
             "trade hypotheses. You analyze signals from global capital flows, central bank policies, fiscal dynamics, "
-            "and systemic risks to propose coherent portfolio strategies."
+            "and systemic risks to propose coherent portfolio strategies. You consider asset allocation, risk management, "
+            "and tactical positioning across equities, fixed income, FX, and commodities."
             f"{get_current_date_for_prompting()}"
         ),
         allow_delegation=False,

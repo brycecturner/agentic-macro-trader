@@ -15,18 +15,22 @@ def create_trader_task(research_summary_json: dict) -> Task:
     task = Task(
         agent = create_trader_agent(),
         description=(
-            "Using the following summarized macro research, generate a possible "
-            "trading hypothesis and portfolio strategy:\n"
-            f"{research_summary_json}\n\n"
-            "Your output should:\n"
-            "- Propose one distinct macro hypotheses\n"
-            "- Suggest corresponding trade expressions (e.g., equities, rates, FX, commodities)\n"
-            "- Include reasoning (macro drivers, risks, catalysts)\n"
-            "- Identify key risk factors and alternative scenarios\n"
+            "Using the following summarized macro research, generate one possible "
+            "trading hypothesis and portfolio strategy:"
+            f"{research_summary_json}"
+            "Your output should:"
+            "- Propose one distinct macro hypotheses"
+            "- Suggest corresponding trade expressions (e.g., equities, rates, spreads, FX, commodities)"
+            "- Include reasoning (macro drivers, risks, catalysts)"
+            "- Identify key risk factors and alternative scenarios"
+            "- Provide a clear investment thesis"
+            "- Give time horizon for the trade"
+            "- The hypothiesis should be actionable, specific, and creative."
+            "- It must be suitable for implementation by a portfolio construction agent."
             f"{get_current_date_for_prompting()}"
         ),
         expected_output=(
-            "The output must strictly follow this JSON schema:\n"
+            "The output must strictly follow this JSON schema:"
             f"{schema}"
         ),
         verbose=True,

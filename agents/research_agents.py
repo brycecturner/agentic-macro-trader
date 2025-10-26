@@ -4,7 +4,7 @@ from tools.research_tools import research_tools
 from utils.utils import get_current_date_for_prompting
 
 # Set up logging
-logger = logging.getLogger("TechPodLogger")
+logger = logging.getLogger("research_agent")
 logger.setLevel(logging.INFO)
 
 file_handler = logging.FileHandler("logs/research_agent.log")

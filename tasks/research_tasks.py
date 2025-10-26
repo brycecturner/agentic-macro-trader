@@ -35,7 +35,7 @@ def create_research_fed_policy_task() -> Task:
         ),
         expected_output=(
             "A structured, 3-5 paragraph long summary including:"
-            "- 2–3 specific examples of concerning trends"
+            "- specific examples of trends or signals from Fed communications"
             "- Citations of relevant data or sources"
             "- A commentary on potential paths to monetary policy, include what the market is currently pricing in"
         ),
@@ -54,18 +54,19 @@ def create_research_banking_risk_task() -> Task:
     task  = Task(
     agent=create_banking_risk_research_agent(),  
     description=(
-        "Research signs of fragility within the U.S. banking system, focusing on small and mid-sized banks. "
+        "Research signs of fragility within the U.S. banking system, Include analysis of both large banks as well as small and mid-sized banks. "
         "Identify early warning indicators such as elevated unrealized losses, deposit flight risk, commercial real estate exposure, "
         "or tightening liquidity conditions. Use credible sources like FDIC, Federal Reserve, and major financial media (WSJ, Bloomberg)."
+        "If there is nothing of concern, explicitly state that as well."
         f"{serper_logic_for_query()}"
         f"{get_current_date_for_prompting()}"
     ),
     expected_output=(
         "A structured, 3-5 paragraph long summary including:"
         "- Key fragility indicators and which institutions or regions are most exposed"
-        "- 2–3 specific examples of concerning trends"
+        "- 2–3 specific examples of concerning trends, if applicable"
         "- Citations of relevant data or sources"
-        "- A brief commentary on potential contagion channels or systemic implications"
+        "- A commentary on potential contagion channels or systemic implications"
     ),
     tools=[],  
     verbose=True,
@@ -144,7 +145,7 @@ def create_research_macro_growth_task() -> Task:
         expected_output=(
             "A structured, 3-5 paragraph long summary including:"
             "- Key changes in macro indicators across major regions"
-            "- Notable surprises (positive or negative) in recent releases"
+            "- Notable surprises (positive or negative) in recent releases, if applicable"
             "- Implications for growth forecasts or risk sentiment"
             "- Sourced commentary from institutions or analysts"
             "- Citations of official data or credible reports"
@@ -152,7 +153,7 @@ def create_research_macro_growth_task() -> Task:
         verbose=True,
         async_execution=True,
     )
-    logger.info("Macro Indicators Task 1 created successfully.")
+    logger.info("Macro Growth Task created successfully.")
     return task
 
 def create_research_macro_inflation_task() -> Task:
@@ -177,6 +178,6 @@ def create_research_macro_inflation_task() -> Task:
         verbose=True,
         async_execution=True,
     )
-    logger.info("Macro Indicators Task 2 created successfully.")
+    logger.info("Macro Inflation Task created successfully.")
     return task
 

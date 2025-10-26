@@ -3,8 +3,8 @@ import logging
 
 from crewai_tools import (
     SerperDevTool,
-    ScrapeWebsiteTool,
-    PDFSearchTool,
+    # ScrapeWebsiteTool,
+    # PDFSearchTool,
     # JsonFormattingTool,
     # PythonTool
 )
@@ -26,7 +26,7 @@ def research_tools():
     logger.info("Initializing standard research tools for agents...")
 
     tools = [
-        SerperDevTool(),       # Search the web (via Serper API)
+        SerperDevTool(),         # Search the web (via Serper API)
         # ScrapeWebsiteTool(),   # Pull text from URLs
         # PDFSearchTool(),       # Extract info from PDF reports
         # PythonTool(),          # Do lightweight calcs
